@@ -1,0 +1,172 @@
+<?xml version="1.0"?>
+<!-- Kuka iiwa 7DoF manipulator -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="iiwa">
+
+    <!-- Enable setting arguments from the launch file -->
+    <xacro:arg name="use_sim" default="false" />
+    <xacro:arg name="use_fake_hardware" default="true" />
+    <xacro:arg name="prefix" default="" />
+    <xacro:arg name="robot_ip" default="192.170.10.2" />
+    <xacro:arg name="robot_port" default="30200" />
+    <xacro:arg name="initial_positions_file" default="initial_positions.yaml" />
+    <xacro:arg name="command_interface" default="position" />
+    <xacro:arg name="base_frame_file" default="base_frame.yaml" />
+    <xacro:arg name="description_package" default="iiwa_description" />
+    <xacro:arg name="runtime_config_package" default="iiwa_description" />
+    <xacro:arg name="controllers_file" default="iiwa_controllers.yaml" />
+    <xacro:arg name="namespace" default="/" />
+
+    <xacro:property name="description_package" value="$(arg description_package)"/>
+
+    <!-- Import iiwa urdf file -->
+    <xacro:include filename="$(find ${description_package})/urdf/iiwa.urdf.xacro" />
+
+    <!-- Import iiwa ros2_control description -->
+    <xacro:include filename="$(find ${description_package})/ros2_control/iiwa.r2c_hardware.xacro" />
+
+    <!-- Import all Gazebo-customization elements -->
+    <xacro:include filename="$(find ${description_package})/gazebo/iiwa.gazebo.xacro"/>
+
+    <!-- Used for fixing robot -->
+    <link name="world"/>
+    <gazebo reference="world">
+        <static>true</static>
+    </gazebo>
+
+    <xacro:property name="base_frame_file" value="$(arg base_frame_file)"/>
+    <xacro:property name="base_frame" value="${xacro.load_yaml(base_frame_file)['base_frame']}"/>
+    <xacro:iiwa parent="world" prefix="$(arg prefix)">
+        <origin xyz="${base_frame['x']} ${base_frame['y']} ${base_frame['z']}"
+            rpy="${base_frame['roll']} ${base_frame['pitch']} ${base_frame['yaw']}" />
+    </xacro:iiwa>
+    
+        <!-- ============================= -->
+    <!-- PARALLEL GRIPPER (CLEAN) -->
+    <!-- ============================= -->
+	<!--
+    <joint name="gripper_fixed_joint" type="fixed">
+      <parent link="tool0"/>
+      <child link="gripper_base"/>
+      <origin xyz="0 0 0.01" rpy="0 0 0"/>
+    </joint>-->
+    
+    <joint name="gripper_fixed_joint" type="revolute">
+      <parent link="tool0"/>
+      <child link="gripper_base"/>
+      <origin xyz="0 0 0.01" rpy="0 0 0"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="0" upper="0" effort="1000" velocity="0"/>
+    </joint>
+    
+    <link name="gripper_base">
+      <visual>
+        <geometry>
+          <box size="0.06 0.06 0.02"/>
+        </geometry>
+        <material name="dark_grey"/>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="0.06 0.06 0.02"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.5"/>
+        <inertia ixx="0.001" iyy="0.001" izz="0.001"
+                 ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+    </link>
+
+    <!-- LEFT FINGER -->
+    <joint name="left_finger_joint" type="prismatic">
+      <parent link="gripper_base"/>
+      <child link="left_finger"/>
+      <origin xyz="0 0.035 0.04" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+      <limit lower="-0.03" upper="0.03" effort="50" velocity="0.05"/>
+    </joint>
+
+    <link name="left_finger">
+      <visual>
+        <geometry>
+          <box size="0.01 0.02 0.08"/>
+        </geometry>
+        <material name="yellow">
+	  <color rgba="1 1 0 1"/>
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="0.01 0.02 0.08"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.05"/>
+        <inertia ixx="1e-4" iyy="1e-4" izz="1e-4"
+               ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+    </link>
+
+    <!-- RIGHT FINGER -->
+    <joint name="right_finger_joint" type="prismatic">
+      <parent link="gripper_base"/>
+      <child link="right_finger"/>
+      <origin xyz="0 -0.035 0.04" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+      <limit lower="-0.03" upper="0.03" effort="50" velocity="0.05"/>
+    </joint>
+
+    <link name="right_finger">
+      <visual>
+        <geometry>
+          <box size="0.01 0.02 0.08"/>
+        </geometry>
+        <material name="yellow">
+	  <color rgba="1 1 0 1"/>
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="0.01 0.02 0.08"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.05"/>
+        <inertia ixx="1e-4" iyy="1e-4" izz="1e-4"
+               ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+    </link>
+    
+<gazebo>
+      <plugin filename="libignition-gazebo-detachable-joint-system.so"
+              name="ignition::gazebo::systems::DetachableJoint">
+        
+        <parent_link>gripper_base</parent_link>
+        
+        <child_model>blue_box_target</child_model>
+        
+        <child_model_link>link</child_model_link>
+        <child_link>link</child_link>
+
+        <attach_topic>/iiwa/grasp/attach</attach_topic>
+        <detach_topic>/iiwa/grasp/detach</detach_topic>
+        
+      </plugin>
+    </gazebo>
+
+    <xacro:iiwa_r2c_hardware
+        name="iiwaRobot" prefix="$(arg prefix)"
+        robot_ip="$(arg robot_ip)" robot_port="$(arg robot_port)"
+        command_interface="$(arg command_interface)"
+        initial_positions_file="$(arg initial_positions_file)"
+        use_sim="$(arg use_sim)" use_fake_hardware="$(arg use_fake_hardware)"
+        />
+
+    <xacro:iiwa_gazebo
+        runtime_config_package="$(arg runtime_config_package)"
+        controllers_file="$(arg controllers_file)"
+        namespace="$(arg namespace)"
+        prefix="$(arg prefix)"
+        />
+
+</robot>
