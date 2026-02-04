@@ -1,0 +1,1084 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <world name="warehouse_world">
+    
+
+    <plugin
+      filename="libignition-gazebo-physics-system.so"
+      name="ignition::gazebo::systems::Physics">
+    </plugin>
+
+    <plugin
+      filename="libignition-gazebo-sensors-system.so"
+      name="ignition::gazebo::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <plugin
+      filename="libignition-gazebo-scene-broadcaster-system.so"
+      name="ignition::gazebo::systems::SceneBroadcaster">
+    </plugin>
+
+    <plugin
+      filename="libignition-gazebo-user-commands-system.so"
+      name="ignition::gazebo::systems::UserCommands">
+    </plugin>
+
+    <!-- Global light source -->
+    <light name="sun" type="directional">
+      <cast_shadows>false</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>1 1 1 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <direction>-0.5 0.1 -1</direction>
+    </light>
+
+
+    <light name="soft_sun" type="directional">
+      <pose>0 0 10 0 0 0</pose>
+
+      <diffuse>0.9 0.9 0.9 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+
+      <direction>-0.3 -0.2 -1</direction>
+
+      <cast_shadows>false</cast_shadows>
+    </light>
+
+    <!-- SCENE (illuminazione globale) -->
+    <scene>
+      <ambient>0.45 0.45 0.45 1</ambient>
+      <background>0.05 0.05 0.05 1</background>
+    </scene>
+
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>1000 1000</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>1000 1000</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="asphalt_plane">
+      <static>true</static>
+
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>20 20 0.1</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <cast_shadows>false</cast_shadows>
+          <geometry>
+            <box>
+              <size>20 20 0.1</size>
+            </box>
+          </geometry>
+
+          <material>
+            <ambient>0.18 0.18 0.18 1</ambient>
+            <diffuse>0.25 0.25 0.25 1</diffuse>
+            <specular>0.02 0.02 0.02 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+
+    <!-- Only one ROS interface plugin is required per world, as any other plugin can connect a Gazebo
+         topic to a ROS topic (or vise versa). -->
+    <!-- <plugin name="ros_interface_plugin" filename="librotors_gazebo_ros_interface_plugin.so"/>-->
+
+    <physics name='default_physics' default='0' type='ode'>
+      <gravity>0 0 -9.8066</gravity>
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>10</iters>
+          <sor>1.3</sor>
+          <use_dynamic_moi_rescaling>0</use_dynamic_moi_rescaling>
+        </solver>
+        <constraints>
+          <cfm>0</cfm>
+          <erp>0.2</erp>
+          <contact_max_correcting_vel>100</contact_max_correcting_vel>
+          <contact_surface_layer>0.001</contact_surface_layer>
+        </constraints>
+      </ode>
+      <max_step_size>0.005</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>250</real_time_update_rate>
+      <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
+    </physics>
+
+    <light name="light_shelf_L1" type="spot">
+      <pose>0 2.5 3.8 0 0 0</pose>
+
+      <diffuse>1 1 1 1</diffuse>
+      <specular>0.4 0.4 0.4 1</specular>
+
+      <attenuation>
+        <range>9</range>
+        <constant>0.2</constant>
+        <linear>0.01</linear>
+        <quadratic>0.002</quadratic>
+      </attenuation>
+
+      <spot>
+        <inner_angle>1.0</inner_angle>
+        <outer_angle>1.6</outer_angle>
+        <falloff>0.8</falloff>
+      </spot>
+
+      <direction>0 0 -1</direction>
+      <cast_shadows>false</cast_shadows>
+    </light>
+
+    <light name="light_shelf_L2" type="spot">
+      <pose>4 2.5 3.8 0 0 0</pose>
+
+      <diffuse>1 1 1 1</diffuse>
+      <specular>0.4 0.4 0.4 1</specular>
+
+      <attenuation>
+        <range>9</range>
+        <constant>0.2</constant>
+        <linear>0.01</linear>
+        <quadratic>0.002</quadratic>
+      </attenuation>
+
+      <spot>
+        <inner_angle>1.0</inner_angle>
+        <outer_angle>1.6</outer_angle>
+        <falloff>0.8</falloff>
+      </spot>
+
+      <direction>0 0 -1</direction>
+      <cast_shadows>false</cast_shadows>
+    </light>
+
+    <light name="light_shelf_L3" type="spot">
+      <pose>-4 2.5 3.8 0 0 0</pose>
+
+      <diffuse>1 1 1 1</diffuse>
+      <specular>0.4 0.4 0.4 1</specular>
+
+      <attenuation>
+        <range>9</range>
+        <constant>0.2</constant>
+        <linear>0.01</linear>
+        <quadratic>0.002</quadratic>
+      </attenuation>
+
+      <spot>
+        <inner_angle>1.0</inner_angle>
+        <outer_angle>1.6</outer_angle>
+        <falloff>0.8</falloff>
+      </spot>
+
+      <direction>0 0 -1</direction>
+      <cast_shadows>false</cast_shadows>
+    </light>
+
+    <light name="light_shelf_R1" type="spot">
+      <pose>0 -2.5 3.8 0 0 0</pose>
+
+      <diffuse>1 1 1 1</diffuse>
+      <specular>0.4 0.4 0.4 1</specular>
+
+      <attenuation>
+        <range>9</range>
+        <constant>0.2</constant>
+        <linear>0.01</linear>
+        <quadratic>0.002</quadratic>
+      </attenuation>
+
+      <spot>
+        <inner_angle>1.0</inner_angle>
+        <outer_angle>1.6</outer_angle>
+        <falloff>0.8</falloff>
+      </spot>
+
+      <direction>0 0 -1</direction>
+      <cast_shadows>false</cast_shadows>
+    </light>
+
+    <light name="light_shelf_R2" type="spot">
+      <pose>4 -2.5 3.8 0 0 0</pose>
+
+      <diffuse>1 1 1 1</diffuse>
+      <specular>0.4 0.4 0.4 1</specular>
+
+      <attenuation>
+        <range>9</range>
+        <constant>0.2</constant>
+        <linear>0.01</linear>
+        <quadratic>0.002</quadratic>
+      </attenuation>
+
+      <spot>
+        <inner_angle>1.0</inner_angle>
+        <outer_angle>1.6</outer_angle>
+        <falloff>0.8</falloff>
+      </spot>
+
+      <direction>0 0 -1</direction>
+      <cast_shadows>false</cast_shadows>
+    </light>
+
+    <light name="light_shelf_R3" type="spot">
+      <pose>-4 -2.5 3.8 0 0 0</pose>
+
+      <diffuse>1 1 1 1</diffuse>
+      <specular>0.4 0.4 0.4 1</specular>
+
+      <attenuation>
+        <range>9</range>
+        <constant>0.2</constant>
+        <linear>0.01</linear>
+        <quadratic>0.002</quadratic>
+      </attenuation>
+
+      <spot>
+        <inner_angle>1.0</inner_angle>
+        <outer_angle>1.6</outer_angle>
+        <falloff>0.8</falloff>
+      </spot>
+
+      <direction>0 0 -1</direction>
+      <cast_shadows>false</cast_shadows>
+    </light>
+
+
+
+
+    <model name="warehouse_shelf_loaded_L1">
+      <static>true</static>
+      <pose>0 2.5 0 0 0 0</pose>
+
+      <!-- LINK UNICO -->
+      <link name="shelf_link">
+
+        <!-- COLLISIONE UNICA (volume pieno) -->
+        <collision name="collision">
+          <pose>0 0 1.2 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2.0 0.6 2.4</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <!-- VISUAL ROOT INVISIBILE -->
+        <visual name="root_visual">
+          <pose>0 0 1.2 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2.0 0.6 2.4</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0 0 0 0</ambient>
+            <diffuse>0 0 0 0</diffuse>
+          </material>
+        </visual>
+
+        <!-- GAMBE -->
+        <visual name="leg_fl">
+          <pose>0.95 0.25 1.2 0 0 0</pose>
+          <geometry><box><size>0.05 0.05 2.4</size></box></geometry>
+        </visual>
+
+        <visual name="leg_fr">
+          <pose>0.95 -0.25 1.2 0 0 0</pose>
+          <geometry><box><size>0.05 0.05 2.4</size></box></geometry>
+        </visual>
+
+        <visual name="leg_bl">
+          <pose>-0.95 0.25 1.2 0 0 0</pose>
+          <geometry><box><size>0.05 0.05 2.4</size></box></geometry>
+        </visual>
+
+        <visual name="leg_br">
+          <pose>-0.95 -0.25 1.2 0 0 0</pose>
+          <geometry><box><size>0.05 0.05 2.4</size></box></geometry>
+        </visual>
+
+        <!-- RIPIANI -->
+        <visual name="shelf_low">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><box><size>2.0 0.6 0.05</size></box></geometry>
+        </visual>
+
+        <visual name="shelf_mid">
+          <pose>0 0 1.3 0 0 0</pose>
+          <geometry><box><size>2.0 0.6 0.05</size></box></geometry>
+        </visual>
+
+        <visual name="shelf_top">
+          <pose>0 0 2.0 0 0 0</pose>
+          <geometry><box><size>2.0 0.6 0.05</size></box></geometry>
+        </visual>
+
+        <!-- PACCO CENTRALE 1 (marrone) -->
+        <visual name="box_mid_1">
+          <pose>0.3 0 1.48 0 0 0</pose>
+          <geometry><box><size>0.4 0.3 0.3</size></box></geometry>
+          <material>
+            <ambient>0.7 0.5 0.3 1</ambient>
+            <diffuse>0.7 0.5 0.3 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- PACCO CENTRALE 2 (blu) -->
+        <visual name="box_mid_2">
+          <pose>-0.3 0 1.48 0 0 0</pose>
+          <geometry><box><size>0.35 0.35 0.25</size></box></geometry>
+          <material>
+            <ambient>0.7 0.5 0.3 1</ambient>
+            <diffuse>0.7 0.5 0.3 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- PACCO RIPIANO BASSO -->
+        <visual name="box_low">
+          <pose>-0.4 0 0.78 0 0 0</pose>
+          <geometry><box><size>0.4 0.3 0.3</size></box></geometry>
+          <material>
+            <ambient>0.7 0.5 0.3 1</ambient>
+            <diffuse>0.7 0.5 0.3 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- PALLET FINTO (SOLO VISUAL) -->
+        <visual name="pallet_low">
+          <pose>0.4 0 0.705 0 0 0</pose>
+          <geometry><box><size>1.0 0.8 0.15</size></box></geometry>
+          <material>
+            <ambient>0.6 0.4 0.2 1</ambient>
+            <diffuse>0.6 0.4 0.2 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="warehouse_shelf_loaded_L2">
+      <static>true</static>
+      <pose>4 2.5 0 0 0 0</pose>
+
+      <!-- LINK UNICO -->
+      <link name="shelf_link">
+
+        <!-- COLLISIONE UNICA (volume pieno) -->
+        <collision name="collision">
+          <pose>0 0 1.2 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2.0 0.6 2.4</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <!-- VISUAL ROOT INVISIBILE -->
+        <visual name="root_visual">
+          <pose>0 0 1.2 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2.0 0.6 2.4</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0 0 0 0</ambient>
+            <diffuse>0 0 0 0</diffuse>
+          </material>
+        </visual>
+
+        <!-- GAMBE -->
+        <visual name="leg_fl">
+          <pose>0.95 0.25 1.2 0 0 0</pose>
+          <geometry><box><size>0.05 0.05 2.4</size></box></geometry>
+        </visual>
+
+        <visual name="leg_fr">
+          <pose>0.95 -0.25 1.2 0 0 0</pose>
+          <geometry><box><size>0.05 0.05 2.4</size></box></geometry>
+        </visual>
+
+        <visual name="leg_bl">
+          <pose>-0.95 0.25 1.2 0 0 0</pose>
+          <geometry><box><size>0.05 0.05 2.4</size></box></geometry>
+        </visual>
+
+        <visual name="leg_br">
+          <pose>-0.95 -0.25 1.2 0 0 0</pose>
+          <geometry><box><size>0.05 0.05 2.4</size></box></geometry>
+        </visual>
+
+        <!-- RIPIANI -->
+        <visual name="shelf_low">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><box><size>2.0 0.6 0.05</size></box></geometry>
+        </visual>
+
+        <visual name="shelf_mid">
+          <pose>0 0 1.3 0 0 0</pose>
+          <geometry><box><size>2.0 0.6 0.05</size></box></geometry>
+        </visual>
+
+        <visual name="shelf_top">
+          <pose>0 0 2.0 0 0 0</pose>
+          <geometry><box><size>2.0 0.6 0.05</size></box></geometry>
+        </visual>
+
+        <!-- PACCO CENTRALE 1 (marrone) -->
+        <!-- <visual name="box_mid_1">
+          <pose>0.3 0 1.48 0 0 0</pose>
+          <geometry><box><size>0.4 0.3 0.3</size></box></geometry>
+          <material>
+            <ambient>0.7 0.5 0.3 1</ambient>
+            <diffuse>0.7 0.5 0.3 1</diffuse>
+          </material>
+        </visual> -->
+
+        <!-- PACCO CENTRALE 2  -->
+        <visual name="box_mid_2">
+          <pose>-0.3 0 1.48 0 0 0</pose>
+          <geometry><box><size>0.35 0.35 0.25</size></box></geometry>
+          <material>
+            <ambient>0.7 0.5 0.3 1</ambient>
+            <diffuse>0.7 0.5 0.3 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- PACCO RIPIANO BASSO -->
+        <visual name="box_low">
+          <pose>-0.4 0 0.78 0 0 0</pose>
+          <geometry><box><size>0.4 0.3 0.3</size></box></geometry>
+          <material>
+            <ambient>0.7 0.5 0.3 1</ambient>
+            <diffuse>0.7 0.5 0.3 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- PALLET FINTO (SOLO VISUAL) -->
+        <visual name="pallet_low">
+          <pose>0.4 0 0.705 0 0 0</pose>
+          <geometry><box><size>1.0 0.8 0.15</size></box></geometry>
+          <material>
+            <ambient>0.6 0.4 0.2 1</ambient>
+            <diffuse>0.6 0.4 0.2 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="warehouse_shelf_loaded_L3">
+      <static>true</static>
+      <pose>-4 2.5 0 0 0 0</pose>
+
+      <!-- LINK UNICO -->
+      <link name="shelf_link">
+
+        <!-- COLLISIONE UNICA (volume pieno) -->
+        <collision name="collision">
+          <pose>0 0 0.4 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2.0 0.6 0.8</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <collision name="invisible_support">
+           <pose>0 -0.15 1.28 0 0 0</pose> 
+           <geometry>
+             <box>
+               <size>0.15 0.15 0.02</size>
+             </box>
+           </geometry>
+           <surface>
+              <friction>
+                <ode>
+                  <mu>100.0</mu>
+                  <mu2>100.0</mu2>
+                </ode>
+              </friction>
+           </surface>
+        </collision>
+
+        <!-- VISUAL ROOT INVISIBILE -->
+        <visual name="root_visual">
+          <pose>0 0 1.2 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2.0 0.6 2.4</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0 0 0 0</ambient>
+            <diffuse>0 0 0 0</diffuse>
+          </material>
+        </visual>
+
+        <!-- GAMBE -->
+        <visual name="leg_fl">
+          <pose>0.95 0.25 1.2 0 0 0</pose>
+          <geometry><box><size>0.05 0.05 2.4</size></box></geometry>
+        </visual>
+
+        <visual name="leg_fr">
+          <pose>0.95 -0.25 1.2 0 0 0</pose>
+          <geometry><box><size>0.05 0.05 2.4</size></box></geometry>
+        </visual>
+
+        <visual name="leg_bl">
+          <pose>-0.95 0.25 1.2 0 0 0</pose>
+          <geometry><box><size>0.05 0.05 2.4</size></box></geometry>
+        </visual>
+
+        <visual name="leg_br">
+          <pose>-0.95 -0.25 1.2 0 0 0</pose>
+          <geometry><box><size>0.05 0.05 2.4</size></box></geometry>
+        </visual>
+
+        <!-- RIPIANI -->
+        <visual name="shelf_low">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><box><size>2.0 0.6 0.05</size></box></geometry>
+        </visual>
+
+        <visual name="shelf_mid">
+          <pose>0 0 1.3 0 0 0</pose>
+          <geometry><box><size>2.0 0.6 0.05</size></box></geometry>
+        </visual>
+
+        <visual name="shelf_top">
+          <pose>0 0 2.0 0 0 0</pose>
+          <geometry><box><size>2.0 0.6 0.05</size></box></geometry>
+        </visual>
+
+        <!-- PACCO RIPIANO ALTO -->
+        <visual name="box_top_1">
+          <pose>0.3 0 2.17 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.4 0.3 0.3</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.7 0.5 0.3 1</ambient>
+            <diffuse>0.7 0.5 0.3 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- PACCO CENTRALE 1 (marrone) -->
+        <!-- <visual name="box_mid_1">
+          <pose>0.3 0 1.48 0 0 0</pose>
+          <geometry><box><size>0.4 0.3 0.3</size></box></geometry>
+          <material>
+            <ambient>0.7 0.5 0.3 1</ambient>
+            <diffuse>0.7 0.5 0.3 1</diffuse>
+          </material>
+        </visual> -->
+        
+
+        <!-- PACCO CENTRALE 2  BLUE -->
+        <!-- <visual name="box_mid_2">
+          <pose>0.0 0 1.48 0 0 0</pose>
+          <geometry><box><size>0.35 0.35 0.25</size></box></geometry>
+          <material>
+            <ambient>0.3 0.5 0.7 1</ambient>
+            <diffuse>0.3 0.5 0.7 1</diffuse>
+          </material>
+        </visual> -->
+
+        <!-- PACCO RIPIANO BASSO -->
+        <!-- <visual name="box_low">
+          <pose>-0.4 0 0.78 0 0 0</pose>
+          <geometry><box><size>0.4 0.3 0.3</size></box></geometry>
+          <material>
+            <ambient>0.7 0.5 0.3 1</ambient>
+            <diffuse>0.7 0.5 0.3 1</diffuse>
+          </material>
+        </visual> -->
+
+        <!-- PALLET FINTO (SOLO VISUAL) -->
+        <visual name="pallet_low">
+          <pose>0.4 0 0.705 0 0 0</pose>
+          <geometry><box><size>1.0 0.8 0.15</size></box></geometry>
+          <material>
+            <ambient>0.6 0.4 0.2 1</ambient>
+            <diffuse>0.6 0.4 0.2 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="blue_box_target">
+      <pose>-4.0 2.35 1.38 0 0 0</pose> 
+      <static>false</static> <link name="link">
+        <inertial>
+          <mass>0.00001</mass>
+          <inertia>
+            <ixx>0.004</ixx><ixy>0</ixy><ixz>0</ixz>
+            <iyy>0.004</iyy><iyz>0</iyz><izz>0.004</izz>
+          </inertia>
+        </inertial>
+        
+        <collision name="collision">
+          <geometry><box><size>0.20 0.20 0.20</size></box></geometry>
+          <surface>
+            <friction>
+                <ode><mu>100.0</mu><mu2>100.0</mu2></ode>
+            </friction>
+            <contact>
+               <ode><kp>10000000.0</kp><kd>1.0</kd></ode>
+            </contact>
+          </surface>
+        </collision>
+        
+        <visual name="visual">
+          <geometry><box><size>0.20 0.20 0.20</size></box></geometry>
+          <material>
+            <ambient>0.3 0.5 0.7 1</ambient>
+            <diffuse>0.3 0.5 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="warehouse_shelf_loaded_R1">
+      <static>true</static>
+      <pose>0 -2.5 0 0 0 3.1416</pose>
+
+      <!-- LINK UNICO -->
+      <link name="shelf_link">
+
+        <!-- COLLISIONE UNICA (volume pieno) -->
+        <collision name="collision">
+          <pose>0 0 1.2 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2.0 0.6 2.4</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <!-- VISUAL ROOT INVISIBILE -->
+        <visual name="root_visual">
+          <pose>0 0 1.2 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2.0 0.6 2.4</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0 0 0 0</ambient>
+            <diffuse>0 0 0 0</diffuse>
+          </material>
+        </visual>
+
+        <!-- GAMBE -->
+        <visual name="leg_fl">
+          <pose>0.95 0.25 1.2 0 0 0</pose>
+          <geometry><box><size>0.05 0.05 2.4</size></box></geometry>
+        </visual>
+
+        <visual name="leg_fr">
+          <pose>0.95 -0.25 1.2 0 0 0</pose>
+          <geometry><box><size>0.05 0.05 2.4</size></box></geometry>
+        </visual>
+
+        <visual name="leg_bl">
+          <pose>-0.95 0.25 1.2 0 0 0</pose>
+          <geometry><box><size>0.05 0.05 2.4</size></box></geometry>
+        </visual>
+
+        <visual name="leg_br">
+          <pose>-0.95 -0.25 1.2 0 0 0</pose>
+          <geometry><box><size>0.05 0.05 2.4</size></box></geometry>
+        </visual>
+
+        <!-- RIPIANI -->
+        <visual name="shelf_low">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><box><size>2.0 0.6 0.05</size></box></geometry>
+        </visual>
+
+        <visual name="shelf_mid">
+          <pose>0 0 1.3 0 0 0</pose>
+          <geometry><box><size>2.0 0.6 0.05</size></box></geometry>
+        </visual>
+
+        <visual name="shelf_top">
+          <pose>0 0 2.0 0 0 0</pose>
+          <geometry><box><size>2.0 0.6 0.05</size></box></geometry>
+        </visual>
+
+        <!-- PACCO CENTRALE 1 (marrone) -->
+        <visual name="box_mid_1">
+          <pose>0.3 0 1.48 0 0 0</pose>
+          <geometry><box><size>0.4 0.3 0.3</size></box></geometry>
+          <material>
+            <ambient>0.7 0.5 0.3 1</ambient>
+            <diffuse>0.7 0.5 0.3 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- PACCO CENTRALE 2  -->
+        <visual name="box_mid_2">
+          <pose>-0.3 0 1.48 0 0 0</pose>
+          <geometry><box><size>0.35 0.35 0.25</size></box></geometry>
+          <material>
+            <ambient>0.7 0.5 0.3 1</ambient>
+            <diffuse>0.7 0.5 0.3 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- PACCO RIPIANO BASSO -->
+        <visual name="box_low">
+          <pose>-0.4 0 0.78 0 0 0</pose>
+          <geometry><box><size>0.4 0.3 0.3</size></box></geometry>
+          <material>
+            <ambient>0.7 0.5 0.3 1</ambient>
+            <diffuse>0.7 0.5 0.3 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- PALLET FINTO (SOLO VISUAL) -->
+        <!-- <visual name="pallet_low">
+          <pose>0.4 0 0.705 0 0 0</pose>
+          <geometry><box><size>1.0 0.8 0.15</size></box></geometry>
+          <material>
+            <ambient>0.6 0.4 0.2 1</ambient>
+            <diffuse>0.6 0.4 0.2 1</diffuse>
+          </material>
+        </visual> -->
+
+      </link>
+    </model>
+
+    <model name="warehouse_shelf_loaded_R2">
+      <static>true</static>
+      <pose>4 -2.5 0 0 0 3.1416</pose>
+
+      <!-- LINK UNICO -->
+      <link name="shelf_link">
+
+        <!-- COLLISIONE UNICA (volume pieno) -->
+        <collision name="collision">
+          <pose>0 0 0.4 0 0 0</pose> <geometry>
+            <box>
+              <size>2.0 0.6 0.8</size> </box>
+          </geometry>
+        </collision>
+
+        <collision name="invisible_support">
+           <pose>0 -0.15 1.28 0 0 0</pose> 
+           <geometry>
+             <box>
+               <size>0.15 0.15 0.02</size>
+             </box>
+           </geometry>
+           <surface>
+              <friction>
+                <ode>
+                  <mu>100.0</mu>
+                  <mu2>100.0</mu2>
+                </ode>
+              </friction>
+           </surface>
+        </collision>
+
+        <visual name="root_visual">
+          <pose>0 0 1.2 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2.0 0.6 2.4</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0 0 0 0</ambient>
+            <diffuse>0 0 0 0</diffuse>
+          </material>
+        </visual>
+
+        <!-- GAMBE -->
+        <visual name="leg_fl">
+          <pose>0.95 0.25 1.2 0 0 0</pose>
+          <geometry><box><size>0.05 0.05 2.4</size></box></geometry>
+        </visual>
+
+        <visual name="leg_fr">
+          <pose>0.95 -0.25 1.2 0 0 0</pose>
+          <geometry><box><size>0.05 0.05 2.4</size></box></geometry>
+        </visual>
+
+        <visual name="leg_bl">
+          <pose>-0.95 0.25 1.2 0 0 0</pose>
+          <geometry><box><size>0.05 0.05 2.4</size></box></geometry>
+        </visual>
+
+        <visual name="leg_br">
+          <pose>-0.95 -0.25 1.2 0 0 0</pose>
+          <geometry><box><size>0.05 0.05 2.4</size></box></geometry>
+        </visual>
+
+        <!-- RIPIANI -->
+        <visual name="shelf_low">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><box><size>2.0 0.6 0.05</size></box></geometry>
+        </visual>
+
+        <visual name="shelf_mid">
+          <pose>0 0 1.3 0 0 0</pose>
+          <geometry><box><size>2.0 0.6 0.05</size></box></geometry>
+        </visual>
+
+        <visual name="shelf_top">
+          <pose>0 0 2.0 0 0 0</pose>
+          <geometry><box><size>2.0 0.6 0.05</size></box></geometry>
+        </visual>
+
+        <!-- PACCO CENTRALE 1 (marrone) -->
+        <visual name="box_mid_1">
+          <pose>0.62 0 1.48 0 0 0</pose>
+          <geometry><box><size>0.4 0.3 0.3</size></box></geometry>
+          <material>
+            <ambient>0.7 0.5 0.3 1</ambient>
+            <diffuse>0.7 0.5 0.3 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- PACCO CENTRALE 2  -->
+        <!-- <visual name="box_mid_2">
+          <pose>-0.3 0 1.48 0 0 0</pose>
+          <geometry><box><size>0.35 0.35 0.25</size></box></geometry>
+          <material>
+            <ambient>0.7 0.5 0.3 1</ambient>
+            <diffuse>0.7 0.5 0.3 1</diffuse>
+          </material>
+        </visual> -->
+
+        <!-- PACCO RIPIANO BASSO -->
+        <visual name="box_low">
+          <pose>-0.4 0 0.78 0 0 0</pose>
+          <geometry><box><size>0.4 0.3 0.3</size></box></geometry>
+          <material>
+            <ambient>0.7 0.5 0.3 1</ambient>
+            <diffuse>0.7 0.5 0.3 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- PALLET FINTO (SOLO VISUAL) -->
+        <visual name="pallet_low">
+          <pose>0.4 0 0.705 0 0 0</pose>
+          <geometry><box><size>1.0 0.8 0.15</size></box></geometry>
+          <material>
+            <ambient>0.6 0.4 0.2 1</ambient>
+            <diffuse>0.6 0.4 0.2 1</diffuse>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+
+    <model name="iiwa_platform">
+      <static>true</static>
+
+      <pose>-4.0 1.5 0.225 0 0 0</pose>
+
+      <link name="platform_link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.8 0.8 0.5</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.8 0.8 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.3 0.3 0.3 1</ambient>
+            <diffuse>0.3 0.3 0.3 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <include>
+      <uri>model://marker</uri> 
+      <name>aruco_marker_iiwa_platform</name>
+      <pose>-3.59 1.5 0.2 0 1.57 3.14</pose> 
+    </include>
+
+    <include>
+      <uri>model://marker</uri> 
+      <name>aruco_marker_shelf_R2</name>
+      <pose>4.95 -2.19 0.25 0 1.57 -1.57</pose> 
+    </include>
+    <model name="aruco_background_panel">
+      <static>true</static>
+      <pose>4.95 -2.21 0.25 0 1.57 -1.57</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.22 0.22 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>0 0 0 1</specular> </material>
+        </visual>
+      </link>
+    </model>
+    <!-- <light name="light_aruco_R2" type="spot">
+      <pose>4.95 -1.0 2.0 0 0 0</pose>
+      
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0 0 0 1</specular>
+      
+      <direction>0 -0.5 -1</direction> 
+
+      <attenuation>
+        <range>6</range>
+        <constant>0.3</constant> <linear>0.02</linear>
+        <quadratic>0.002</quadratic>
+      </attenuation>
+
+      <spot>
+        <inner_angle>0.8</inner_angle>
+        <outer_angle>2.0</outer_angle>
+        <falloff>1.0</falloff>
+      </spot>
+      <cast_shadows>false</cast_shadows>
+    </light> -->
+    <!-- <include>
+      <uri>model://marker</uri> 
+      <name>aruco_marker_test_front</name>
+      <pose>1.5 0.0 0.25 0 1.57 0</pose> 
+    </include> -->
+
+    <model name="wall_left">
+      <static>true</static>
+      <pose>-9 0 1.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>0.2 14 3</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>0.2 14 3</size></box>
+          </geometry>
+          <material>
+            <ambient>0.6 0.6 0.6 0.35</ambient>
+            <diffuse>0.6 0.6 0.6 0.35</diffuse>
+            <specular>0.1 0.1 0.1 0.35</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="wall_right">
+      <static>true</static>
+      <pose>9 0 1.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>0.2 14 3</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>0.2 14 3</size></box>
+          </geometry>
+          <material>
+            <ambient>0.6 0.6 0.6 0.35</ambient>
+            <diffuse>0.6 0.6 0.6 0.35</diffuse>
+            <specular>0.1 0.1 0.1 0.35</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="wall_back">
+      <static>true</static>
+      <pose>0 7 1.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>18 0.2 3</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>18 0.2 3</size></box>
+          </geometry>
+          <material>
+            <ambient>0.6 0.6 0.6 0.35</ambient>
+            <diffuse>0.6 0.6 0.6 0.35</diffuse>
+            <specular>0.1 0.1 0.1 0.35</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="wall_front">
+      <static>true</static>
+      <pose>0 -7 1.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>18 0.2 3</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>18 0.2 3</size></box>
+          </geometry>
+          <material>
+            <ambient>0.6 0.6 0.6 0.35</ambient>
+            <diffuse>0.6 0.6 0.6 0.35</diffuse>
+            <specular>0.1 0.1 0.1 0.35</specular>
+          </material>
+          <cast_shadows>false</cast_shadows>
+        </visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>
